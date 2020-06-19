@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">trigram_app</string>
+    <string name="plain_text_add_string">String to add</string>
+    <string name="plain_text_remove_string">String to remove</string>
+    <string name="add">ADD</string>
+    <string name="remove">REMOVE</string>
+
 </resources>
