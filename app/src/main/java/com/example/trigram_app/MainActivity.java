@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -30,9 +31,6 @@ public class MainActivity extends AppCompatActivity {
     ArrayAdapter<String> listView1Adapter;
     ListView listView1;
     Button addButton;
-    Button removeButton;
-    EditText textAddString;
-    EditText textRemoveString;
     BleDeviceScanActivity bleDeviceScanActivity;
 
     private void setStringList(){
@@ -51,8 +49,10 @@ public class MainActivity extends AppCompatActivity {
         listView1.setAdapter(listView1Adapter);
         AdapterView.OnItemClickListener messageClickedHandler = new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parent, View v, int position, long id) {
-                String toPut = listView1Adapter.getItem(position);
-                listView1Adapter.remove(toPut);
+                if (!listView1Adapter.isEmpty()) {
+                    String toPut = listView1Adapter.getItem(position);
+                    listView1Adapter.remove(toPut);
+                }
             }
         };
         listView1.setOnItemClickListener(messageClickedHandler);
@@ -70,37 +70,18 @@ public class MainActivity extends AppCompatActivity {
         addButton = findViewById(R.id.add_button);
     }
 
-    private void setRemoveButton(){
-        removeButton = findViewById(R.id.remove_button);
-    }
-
     private void configureAddButton(){
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 listView1Adapter.clear();
                 bleDeviceScanActivity.scanLeDevice(true, listView1Adapter);
             }
         });
     }
 
-    private void configureRemoveButton(){
-        removeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                String toRemove = textRemoveString.getText().toString();
-                removeString(toRemove);
-            }
-        });
-    }
 
-    private void setAddString(){
-        textAddString = findViewById(R.id.add_plain_text);
-    }
 
-    private void setRemoveString(){
-        textRemoveString = findViewById(R.id.remove_plain_text);
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -127,14 +108,8 @@ public class MainActivity extends AppCompatActivity {
         setListView1Adapter(stringList);
         configureListView1();
 
-
-        setAddString();
-        setRemoveString();
-
         setAddButton();
-        setRemoveButton();
         configureAddButton();
-        configureRemoveButton();
 
         bleDeviceScanActivity = new BleDeviceScanActivity(this);
     }
