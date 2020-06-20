@@ -28,20 +28,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setListView1(){
-        listView1 = (ListView)findViewById(R.id.listView1);
+        listView1 = findViewById(R.id.listView1);
     }
 
     private void setListView1Adapter(ArrayList<String> stringContainer){
-        listView1Adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, stringContainer);
+        listView1Adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, stringContainer);
     }
 
     private void configureListView1(){
         listView1.setAdapter(listView1Adapter);
         AdapterView.OnItemClickListener messageClickedHandler = new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parent, View v, int position, long id) {
+                /*
                 String toPut = (String)parent.getAdapter().getItem(position);
                 Toast myToast = Toast.makeText(getApplicationContext(), toPut, Toast.LENGTH_SHORT);
                 myToast.show();
+                 */
+                /*
+                String toPut = listView1Adapter.getItem(position);
+                textRemoveString.setText(toPut);
+                 */
+
+                String toPut = listView1Adapter.getItem(position);
+                listView1Adapter.remove(toPut);
             }
         };
         listView1.setOnItemClickListener(messageClickedHandler);
@@ -56,11 +65,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setAddButton(){
-        addButton = (Button)findViewById(R.id.add_button);
+        addButton = findViewById(R.id.add_button);
     }
 
     private void setRemoveButton(){
-        removeButton = (Button)findViewById(R.id.remove_button);
+        removeButton = findViewById(R.id.remove_button);
     }
 
     private void configureAddButton(){
@@ -84,11 +93,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setAddString(){
-        textAddString = (EditText)findViewById(R.id.add_plain_text);
+        textAddString = findViewById(R.id.add_plain_text);
     }
 
     private void setRemoveString(){
-        textRemoveString = (EditText)findViewById(R.id.remove_plain_text);
+        textRemoveString = findViewById(R.id.remove_plain_text);
     }
 
     @Override
