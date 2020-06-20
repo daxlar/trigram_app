@@ -1,7 +1,18 @@
 package com.example.trigram_app;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     Button removeButton;
     EditText textAddString;
     EditText textRemoveString;
+    BleDeviceScanActivity bleDeviceScanActivity;
 
     private void setStringList(){
         stringList = new ArrayList<>();
@@ -39,16 +51,6 @@ public class MainActivity extends AppCompatActivity {
         listView1.setAdapter(listView1Adapter);
         AdapterView.OnItemClickListener messageClickedHandler = new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parent, View v, int position, long id) {
-                /*
-                String toPut = (String)parent.getAdapter().getItem(position);
-                Toast myToast = Toast.makeText(getApplicationContext(), toPut, Toast.LENGTH_SHORT);
-                myToast.show();
-                 */
-                /*
-                String toPut = listView1Adapter.getItem(position);
-                textRemoveString.setText(toPut);
-                 */
-
                 String toPut = listView1Adapter.getItem(position);
                 listView1Adapter.remove(toPut);
             }
@@ -76,8 +78,8 @@ public class MainActivity extends AppCompatActivity {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
-                String toAdd = textAddString.getText().toString();
-                addString(toAdd);
+                listView1Adapter.clear();
+                bleDeviceScanActivity.scanLeDevice(true, listView1Adapter);
             }
         });
     }
@@ -100,10 +102,24 @@ public class MainActivity extends AppCompatActivity {
         textRemoveString = findViewById(R.id.remove_plain_text);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // workaround for location enabling
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED){
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)){
+                Toast.makeText(this, "The permission to get BLE location data is required", Toast.LENGTH_SHORT).show();
+            }else{
+                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            }
+        }else{
+            Toast.makeText(this, "Location permissions already granted", Toast.LENGTH_SHORT).show();
+        }
+
 
 
         setStringList();
@@ -120,5 +136,16 @@ public class MainActivity extends AppCompatActivity {
         configureAddButton();
         configureRemoveButton();
 
+        bleDeviceScanActivity = new BleDeviceScanActivity(this);
     }
+
+    /*
+    @Override
+    protected void onResume() {
+        super.onResume();
+        bleDeviceScanActivity = new BleDeviceScanActivity();
+    }
+     */
+
+
 }
