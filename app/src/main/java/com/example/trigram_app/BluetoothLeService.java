@@ -28,7 +28,7 @@ public class BluetoothLeService extends Service {
     private BluetoothManager bluetoothManager;
     private BluetoothAdapter bluetoothAdapter;
     private String bluetoothDeviceAddress;
-    private BluetoothGatt mBluetoothGatt;
+    public BluetoothGatt mBluetoothGatt;
     private int connectionState = STATE_DISCONNECTED;
 
 
@@ -50,6 +50,7 @@ public class BluetoothLeService extends Service {
 
     //public final static UUID UART = UUID.fromString("6E400001-B5A3-F393-E0A9-E50E24DCCA9E");
     public final static UUID UART_TX_CHARACTERISTIC_ID = UUID.fromString("6E400003-B5A3-F393-E0A9-E50E24DCCA9E");
+    public final static UUID UART_RX_CHARACTERISTIC_ID = UUID.fromString("6E400002-B5A3-F393-E0A9-E50E24DCCA9E");
     public final static UUID UART_SERVICE_ID = UUID.fromString("6E400001-B5A3-F393-E0A9-E50E24DCCA9E");
     public UUID convertFromInteger(int i) {
         final long MSB = 0x0000000000001000L;
@@ -90,9 +91,6 @@ public class BluetoothLeService extends Service {
                         /*
                         broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
                          */
-
-
-
                         BluetoothGattCharacteristic characteristic = gatt.getService(UART_SERVICE_ID)
                                                                          .getCharacteristic(UART_TX_CHARACTERISTIC_ID);
 
@@ -136,6 +134,19 @@ public class BluetoothLeService extends Service {
                     }
                 }
                 */
+
+                /*
+                @Override
+                // Result of a characteristic read operation
+                public void onCharacteristicWrite(BluetoothGatt gatt,
+                                                 BluetoothGattCharacteristic characteristic,
+                                                 int status) {
+                        Log.i("write", "status");
+
+                }
+                 */
+
+
                 @Override
                 public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
                     final byte[] data = characteristic.getValue();
@@ -146,7 +157,7 @@ public class BluetoothLeService extends Service {
                         Log.i("onCharacteristicChanged", stringBuilder.toString());
                     }
                 }
-
+                
             };
 
 
