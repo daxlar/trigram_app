@@ -1,5 +1,3 @@
-hello world
-
 Notes:
 
 some ble characteristics are not read-able
