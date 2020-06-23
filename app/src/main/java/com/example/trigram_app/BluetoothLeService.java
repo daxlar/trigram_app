@@ -116,6 +116,7 @@ public class BluetoothLeService extends Service {
                     gatt.writeCharacteristic(characteristic);
                 }
 
+                /*
                 @Override
                 // Result of a characteristic read operation
                 public void onCharacteristicRead(BluetoothGatt gatt,
@@ -134,6 +135,7 @@ public class BluetoothLeService extends Service {
                         Log.i("in characteristic read:", "status failed");
                     }
                 }
+                */
                 @Override
                 public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
                     final byte[] data = characteristic.getValue();
@@ -144,6 +146,7 @@ public class BluetoothLeService extends Service {
                         Log.i("onCharacteristicChanged", stringBuilder.toString());
                     }
                 }
+
             };
 
 
