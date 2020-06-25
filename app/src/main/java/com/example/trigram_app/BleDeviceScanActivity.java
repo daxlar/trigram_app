@@ -43,10 +43,8 @@ public class BleDeviceScanActivity extends ListActivity {
 
     // Stops scanning after 10 seconds.
     public  void scanLeDevice(final boolean enable, final ArrayAdapter<String> listAdapter) {
-        Log.i("scan le device", "starting" );
         deviceHashMap.clear();
         deviceNames.clear();
-        Log.i("scan le device", " cleared objects");
         // Device scan callback.
         final BluetoothAdapter.LeScanCallback leScanCallback =
                 new BluetoothAdapter.LeScanCallback() {
@@ -55,14 +53,12 @@ public class BleDeviceScanActivity extends ListActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Log.i("scan le device", " found device");
                                 String bleDeviceName = device.getName();
                                 if(!deviceHashMap.containsKey(bleDeviceName) && bleDeviceName != null) {
                                     listAdapter.add(device.getName());
                                     deviceHashMap.put(device.getName(), device);
                                     deviceNames.add(device.getName());
                                 }
-                                Log.i("scan le device", "added object");
                             }
                         });
                     }

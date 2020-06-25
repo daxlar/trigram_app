@@ -3,7 +3,6 @@ package com.example.trigram_app;
 
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
@@ -94,7 +93,7 @@ public class BluetoothLeService extends Service {
                         BluetoothGattCharacteristic characteristic = gatt.getService(UART_SERVICE_ID)
                                                                          .getCharacteristic(UART_TX_CHARACTERISTIC_ID);
 
-                        staticBLE.bleUARTTXcharacteristic = characteristic;
+                        bleSingleton.bleUARTTXcharacteristic = characteristic;
                         gatt.setCharacteristicNotification(characteristic, true);
 
                         BluetoothGattDescriptor descriptor = characteristic.getDescriptor(convertFromInteger(0x2902));
@@ -157,7 +156,7 @@ public class BluetoothLeService extends Service {
                         Log.i("onCharacteristicChanged", stringBuilder.toString());
                     }
                 }
-                
+
             };
 
 
@@ -286,7 +285,7 @@ public class BluetoothLeService extends Service {
         }
         */
 
-        BluetoothDevice device = staticBLE.getBleDevice();
+        BluetoothDevice device = bleSingleton.getBleDevice();
         // We want to directly connect to the device, so we are setting the autoConnect
         // parameter to false.
         mBluetoothGatt = device.connectGatt(this, false, gattCallback);

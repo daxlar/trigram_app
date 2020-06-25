@@ -1,25 +1,19 @@
 package com.example.trigram_app;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -30,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> stringList;
     ArrayAdapter<String> listView1Adapter;
     ListView listView1;
-    Button addButton;
+    Button scanButton;
     BleDeviceScanActivity bleDeviceScanActivity;
 
     private void setStringList(){
@@ -51,27 +45,24 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView parent, View v, int position, long id) {
                 if (!listView1Adapter.isEmpty()) {
                     String toPut = listView1Adapter.getItem(position);
-                    listView1Adapter.remove(toPut);
+                    //listView1Adapter.remove(toPut);
+                    bleSingleton.setBleDevice(bleDeviceScanActivity.getBleDevice(toPut), toPut);
+                    //staticBLE.bleDevice = bleDeviceScanActivity.getBleDevice(toPut);
+                    //staticBLE.hexChecker = "set_device";
+                    Intent intent = new Intent(MainActivity.this, postScanningActivity.class);
+                    startActivity(intent);
                 }
             }
         };
         listView1.setOnItemClickListener(messageClickedHandler);
     }
 
-    private void addString(String s){
-        listView1Adapter.add(s);
-    }
-
-    private void removeString(String s){
-        listView1Adapter.remove(s);
-    }
-
     private void setAddButton(){
-        addButton = findViewById(R.id.add_button);
+        scanButton = findViewById(R.id.add_button);
     }
 
     private void configureAddButton(){
-        addButton.setOnClickListener(new View.OnClickListener() {
+        scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 listView1Adapter.clear();
@@ -101,8 +92,6 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Location permissions already granted", Toast.LENGTH_SHORT).show();
         }
 
-
-
         setStringList();
         setListView1();
         setListView1Adapter(stringList);
@@ -113,14 +102,4 @@ public class MainActivity extends AppCompatActivity {
 
         bleDeviceScanActivity = new BleDeviceScanActivity(this);
     }
-
-    /*
-    @Override
-    protected void onResume() {
-        super.onResume();
-        bleDeviceScanActivity = new BleDeviceScanActivity();
-    }
-     */
-
-
 }
