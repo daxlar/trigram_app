@@ -8,9 +8,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.EditText;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.UUID;
 
@@ -19,6 +23,9 @@ public class postScanningActivity extends AppCompatActivity {
     BluetoothLeService bleService;
     Boolean mIsBound;
     EditText editText;
+
+    DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+    DatabaseReference mConditionRef = mRootRef.child("testing");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,26 +76,16 @@ public class postScanningActivity extends AppCompatActivity {
                                                     1);
             // TODO: working on this
             bleService.connect();
-            new Thread(new Runnable(){
-                public void run() {
-                    // TODO Auto-generated method stub
-                    int counter = 0;
-                    while(true)
-                    {
-                        /*
-                        if(staticBLE.bleUARTTXcharacteristic != null) {
-                            BluetoothGattCharacteristic c = bleService.mBluetoothGatt.getService(BluetoothLeService.UART_SERVICE_ID)
-                                    .getCharacteristic(BluetoothLeService.UART_RX_CHARACTERISTIC_ID);
-                            //Log.i("main loop", c.getUuid().toString());
-                            c.setValue("hello");
-                            bleService.mBluetoothGatt.writeCharacteristic(c);
-                        }
-                         */
-                    }
-
+            final Handler handler = new Handler();
+            final int delay = 1000;
+            handler.postDelayed(new Runnable(){
+                public void run(){
+                    
+                    handler.postDelayed(this, delay);
                 }
-            }).start();
-            //getRandomNumberFromService(); // return a random number from the service
+            }, delay);
+
+
         }
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
