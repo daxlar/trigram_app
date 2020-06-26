@@ -10,12 +10,20 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.EditText;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.UUID;
 
 public class postScanningActivity extends AppCompatActivity {
@@ -23,19 +31,31 @@ public class postScanningActivity extends AppCompatActivity {
     BluetoothLeService bleService;
     Boolean mIsBound;
     EditText editText;
+    LineGraphSeries<DataPoint> series;
+    GraphView graphView;
+    int temp;
 
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-    DatabaseReference mConditionRef = mRootRef.child("testing");
+    DatabaseReference mConditionRef = mRootRef.child("devices");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_scanning);
 
-        editText = findViewById(R.id.editTextTextPersonName);
-        editText.setText(bleSingleton.getBleDeviceName());
-    }
+        temp = 0;
 
+        editText = findViewById(R.id.editTextTextPersonName);
+        editText.setText(bleDeviceSingleton.getBleDeviceName());
+        graphView = findViewById(R.id.graph);
+        series = new LineGraphSeries<>();
+        series.setDrawDataPoints(true);
+        graphView.addSeries(series);
+        graphView.getViewport().setScalable(true);
+        graphView.getViewport().setScrollable(true);
+        graphView.getViewport().setScalableY(true);
+        graphView.getViewport().setScrollableY(true);
+    }
     @Override
     protected void onResume() {
         super.onResume();
@@ -80,7 +100,40 @@ public class postScanningActivity extends AppCompatActivity {
             final int delay = 1000;
             handler.postDelayed(new Runnable(){
                 public void run(){
-                    
+                    int devicesNearby = 0;
+                    boolean bufferChoice = bleDataSingleton.bufferDecider.get();
+                    bleDataSingleton.bufferDecider.set(!bufferChoice);
+                    while(!bleDataSingleton.finishedDataOperation.get()){
+
+                    }
+                    if(!bufferChoice){
+                        for (Map.Entry addresses : bleDataSingleton.macDataBuffer1.entrySet()) {
+                            String macAddress = (String) addresses.getKey();
+                            Integer macCount = (Integer) addresses.getValue();
+                            if (macCount > 4) {
+                                devicesNearby++;
+                            }
+                        }
+                        bleDataSingleton.macDataBuffer1.clear();
+                    }else{
+
+                        for (Map.Entry addresses : bleDataSingleton.macDataBuffer2.entrySet()) {
+                            String macAddress = (String) addresses.getKey();
+                            Integer macCount = (Integer) addresses.getValue();
+                            if (macCount > 4) {
+                                devicesNearby++;
+                            }
+                        }
+                        bleDataSingleton.macDataBuffer2.clear();
+                    }
+
+                    Log.i("onServiceConnected", "device count " + devicesNearby);
+                    Date currentTime = Calendar.getInstance().getTime();
+                    String epoch = currentTime.toString();
+                    //DataPoint dataPoint = new DataPoint(currentTime, devicesNearby);
+                    DataPoint dataPoint = new DataPoint(temp++, devicesNearby);
+                    series.appendData(dataPoint, true,1000);
+                    mConditionRef.child(epoch).setValue(devicesNearby);
                     handler.postDelayed(this, delay);
                 }
             }, delay);
