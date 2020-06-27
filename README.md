@@ -16,9 +16,9 @@ You can follow steps here:
 [Firebase Real-Time Database](https://firebase.google.com/docs/database/android/start)    
 
 Operation process:    
-![Open app and you should be greeted with:](https://github.com/daxlar/trigram_app/blob/master/pictures/greeting.jpg)
-![Click scan and connect to NORDIC_UART:](https://github.com/daxlar/trigram_app/blob/master/pictures/scan.jpg)
-![The GraphView UI displays how many devices seen nearby:](https://github.com/daxlar/trigram_app/blob/master/pictures/connected.jpg)
+![Open app and you should be greeted with:](https://github.com/daxlar/trigram_app/blob/master/pictures/greeting.jpg){:height="700px" width="400px"}
+![Click scan and connect to NORDIC_UART:](https://github.com/daxlar/trigram_app/blob/master/pictures/scan.jpg){:height="700px" width="400px"}
+![The GraphView UI displays how many devices seen nearby:](https://github.com/daxlar/trigram_app/blob/master/pictures/connected.jpg){:height="700px" width="400px"}
    
 Technical notes:  
 
