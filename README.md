@@ -16,9 +16,8 @@ You can follow steps here:
 [Firebase Real-Time Database](https://firebase.google.com/docs/database/android/start)    
 
 Operation process:    
-![Open app and you should be greeted with:](https://github.com/daxlar/trigram_app/blob/master/pictures/greeting.jpg){:class="img-responsive"}  
-![Open app and you should be greeted with:](https://github.com/daxlar/trigram_app/blob/master/pictures/greeting.jpg){:height="50%" width="50%"}  
-![Open app and you should be greeted with:](https://github.com/daxlar/trigram_app/blob/master/pictures/greeting.jpg){:height="100px" width="100px"}  
+Open app and you should be greeted with:  
+<img src="https://github.com/daxlar/trigram_app/blob/master/pictures/greeting.jpg" width="100" height="100">  
 
    
 Technical notes:  
