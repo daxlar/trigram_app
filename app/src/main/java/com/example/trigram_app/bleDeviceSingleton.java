@@ -3,7 +3,7 @@ package com.example.trigram_app;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
 
-public class bleSingleton {
+public class bleDeviceSingleton {
 
     public static BluetoothDevice bleDevice;
     public static String bleDeviceName;

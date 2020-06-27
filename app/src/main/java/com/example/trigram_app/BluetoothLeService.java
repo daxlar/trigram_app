@@ -93,7 +93,7 @@ public class BluetoothLeService extends Service {
                         BluetoothGattCharacteristic characteristic = gatt.getService(UART_SERVICE_ID)
                                                                          .getCharacteristic(UART_TX_CHARACTERISTIC_ID);
 
-                        bleSingleton.bleUARTTXcharacteristic = characteristic;
+                        bleDeviceSingleton.bleUARTTXcharacteristic = characteristic;
                         gatt.setCharacteristicNotification(characteristic, true);
 
                         BluetoothGattDescriptor descriptor = characteristic.getDescriptor(convertFromInteger(0x2902));
@@ -113,46 +113,48 @@ public class BluetoothLeService extends Service {
                     gatt.writeCharacteristic(characteristic);
                 }
 
-                /*
-                @Override
-                // Result of a characteristic read operation
-                public void onCharacteristicRead(BluetoothGatt gatt,
-                                                 BluetoothGattCharacteristic characteristic,
-                                                 int status) {
-                    if (status == BluetoothGatt.GATT_SUCCESS) {
-                        //broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
-                        final byte[] data = characteristic.getValue();
-                        if (data != null && data.length > 0) {
-                            final StringBuilder stringBuilder = new StringBuilder(data.length);
-                            for(byte byteChar : data)
-                                stringBuilder.append(String.format("%02X ", byteChar));
-                            Log.i("got data", stringBuilder.toString());
-                        }
-                    }else{
-                        Log.i("in characteristic read:", "status failed");
-                    }
-                }
-                */
-
-                /*
-                @Override
-                // Result of a characteristic read operation
-                public void onCharacteristicWrite(BluetoothGatt gatt,
-                                                 BluetoothGattCharacteristic characteristic,
-                                                 int status) {
-                        Log.i("write", "status");
-
-                }
-                 */
-
-
                 @Override
                 public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
                     final byte[] data = characteristic.getValue();
                     if (data != null && data.length > 0) {
+                        bleDataSingleton.finishedDataOperation.set(false);
                         final StringBuilder stringBuilder = new StringBuilder(data.length);
                         for(byte byteChar : data)
                             stringBuilder.append(String.format("%02X ", byteChar));
+                        boolean bufferChoice = bleDataSingleton.bufferDecider.get();
+                        String macAddress = stringBuilder.toString();
+                        if(!bufferChoice){
+                            try {
+                                if(!bleDataSingleton.macDataBuffer1.containsKey(macAddress)) {
+                                    Integer to_put = new Integer(1);
+                                    bleDataSingleton.macDataBuffer1.put(macAddress, to_put);
+                                } else {
+                                    Integer to_mod = bleDataSingleton.macDataBuffer1.get(macAddress);
+                                    int addedVal = to_mod.intValue() + 1;
+                                    bleDataSingleton.macDataBuffer1.put(macAddress, addedVal);
+                                }
+                                Log.i("adding data:", "success");
+                            }catch(Exception e){
+                                Log.i("adding data:", "false");
+                                e.printStackTrace();
+                            }
+                        }else{
+                            try {
+                                if(!bleDataSingleton.macDataBuffer2.containsKey(macAddress)) {
+                                    Integer to_put = new Integer(1);
+                                    bleDataSingleton.macDataBuffer2.put(macAddress, to_put);
+                                } else {
+                                    Integer to_mod = bleDataSingleton.macDataBuffer2.get(macAddress);
+                                    int addedVal = to_mod.intValue() + 1;
+                                    bleDataSingleton.macDataBuffer2.put(macAddress, addedVal);
+                                }
+                                Log.i("adding data:", "true");
+                            }catch(Exception e){
+                                Log.i("adding data:", "failed");
+                                e.printStackTrace();
+                            }
+                        }
+                        bleDataSingleton.finishedDataOperation.set(true);
                         Log.i("onCharacteristicChanged", stringBuilder.toString());
                     }
                 }
@@ -285,7 +287,7 @@ public class BluetoothLeService extends Service {
         }
         */
 
-        BluetoothDevice device = bleSingleton.getBleDevice();
+        BluetoothDevice device = bleDeviceSingleton.getBleDevice();
         // We want to directly connect to the device, so we are setting the autoConnect
         // parameter to false.
         mBluetoothGatt = device.connectGatt(this, false, gattCallback);

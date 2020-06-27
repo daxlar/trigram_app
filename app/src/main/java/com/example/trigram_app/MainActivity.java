@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                 if (!listView1Adapter.isEmpty()) {
                     String toPut = listView1Adapter.getItem(position);
                     //listView1Adapter.remove(toPut);
-                    bleSingleton.setBleDevice(bleDeviceScanActivity.getBleDevice(toPut), toPut);
+                    bleDeviceSingleton.setBleDevice(bleDeviceScanActivity.getBleDevice(toPut), toPut);
                     //staticBLE.bleDevice = bleDeviceScanActivity.getBleDevice(toPut);
                     //staticBLE.hexChecker = "set_device";
                     Intent intent = new Intent(MainActivity.this, postScanningActivity.class);

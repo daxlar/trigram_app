@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "778411306585",
+    "firebase_url": "https://trigram-3f891.firebaseio.com",
+    "project_id": "trigram-3f891",
+    "storage_bucket": "trigram-3f891.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:778411306585:android:21ce78e3de31037bb38b48",
+        "android_client_info": {
+          "package_name": "com.example.trigram_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "778411306585-t4nlfcdf5arqaluilaf0844fr47a66as.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzYx0GJUdKTi1hmqeWF_D6xyQ4cjL32HI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "778411306585-t4nlfcdf5arqaluilaf0844fr47a66as.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
