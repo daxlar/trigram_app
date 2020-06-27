@@ -11,12 +11,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.provider.ContactsContract;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.widget.EditText;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
@@ -33,7 +36,7 @@ public class postScanningActivity extends AppCompatActivity {
     EditText editText;
     LineGraphSeries<DataPoint> series;
     GraphView graphView;
-    int temp;
+    int secondCounter;
 
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mConditionRef = mRootRef.child("devices");
@@ -43,18 +46,34 @@ public class postScanningActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_scanning);
 
-        temp = 0;
+        secondCounter = 0;
 
         editText = findViewById(R.id.editTextTextPersonName);
         editText.setText(bleDeviceSingleton.getBleDeviceName());
         graphView = findViewById(R.id.graph);
+        GridLabelRenderer glr = graphView.getGridLabelRenderer();
+        glr.setPadding(50);
         series = new LineGraphSeries<>();
         series.setDrawDataPoints(true);
         graphView.addSeries(series);
+        graphView.getViewport().setMinY(0);
+        graphView.getViewport().setMaxY(7);
         graphView.getViewport().setScalable(true);
         graphView.getViewport().setScrollable(true);
-        graphView.getViewport().setScalableY(true);
+        //graphView.getViewport().setScalableY(true);
         graphView.getViewport().setScrollableY(true);
+        //final java.text.DateFormat dateTimeFormatter = DateFormat.getTimeFormat(this);
+        graphView.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter(){
+            @Override
+            public String formatLabel(double value, boolean isValueX){
+                if(isValueX){
+                    //return dateTimeFormatter.format(new Date((long) value*1000));
+                    return super.formatLabel(value, isValueX) + "s";
+                }else{
+                    return super.formatLabel(value, isValueX) + " devices";
+                }
+            }
+        });
     }
     @Override
     protected void onResume() {
@@ -110,7 +129,7 @@ public class postScanningActivity extends AppCompatActivity {
                         for (Map.Entry addresses : bleDataSingleton.macDataBuffer1.entrySet()) {
                             String macAddress = (String) addresses.getKey();
                             Integer macCount = (Integer) addresses.getValue();
-                            if (macCount > 4) {
+                            if (macCount >= 1) {
                                 devicesNearby++;
                             }
                         }
@@ -120,20 +139,22 @@ public class postScanningActivity extends AppCompatActivity {
                         for (Map.Entry addresses : bleDataSingleton.macDataBuffer2.entrySet()) {
                             String macAddress = (String) addresses.getKey();
                             Integer macCount = (Integer) addresses.getValue();
-                            if (macCount > 4) {
+                            if (macCount >= 1) {
                                 devicesNearby++;
                             }
                         }
                         bleDataSingleton.macDataBuffer2.clear();
                     }
-
+                    if(devicesNearby >= 1){
+                        devicesNearby--;
+                    }
                     Log.i("onServiceConnected", "device count " + devicesNearby);
                     Date currentTime = Calendar.getInstance().getTime();
                     String epoch = currentTime.toString();
-                    //DataPoint dataPoint = new DataPoint(currentTime, devicesNearby);
-                    DataPoint dataPoint = new DataPoint(temp++, devicesNearby);
+                    DataPoint dataPoint = new DataPoint(secondCounter++, devicesNearby);
                     series.appendData(dataPoint, true,1000);
                     mConditionRef.child(epoch).setValue(devicesNearby);
+
                     handler.postDelayed(this, delay);
                 }
             }, delay);
