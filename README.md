@@ -17,7 +17,7 @@ You can follow steps here:
 
 Operation process:    
 Open app and you should be greeted with:  
-<img src="https://github.com/daxlar/trigram_app/blob/master/pictures/greeting.jpg" width="100" height="100">  
+<img src="https://github.com/daxlar/trigram_app/blob/master/pictures/greeting.jpg" width="200" height="400">  
 
    
 Technical notes:  
