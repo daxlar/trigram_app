@@ -18,9 +18,8 @@ You can follow steps here:
 Operation process:    
 ![Open app and you should be greeted with:](https://github.com/daxlar/trigram_app/blob/master/pictures/greeting.jpg){:class="img-responsive"}  
 ![Open app and you should be greeted with:](https://github.com/daxlar/trigram_app/blob/master/pictures/greeting.jpg){:height="50%" width="50%"}  
-![Open app and you should be greeted with:](https://github.com/daxlar/trigram_app/blob/master/pictures/greeting.jpg){:height="700px" width="400px"}  
-![Click scan and connect to NORDIC_UART:](https://github.com/daxlar/trigram_app/blob/master/pictures/scan.jpg){:height="700px" width="400px"}
-![The GraphView UI displays how many devices seen nearby:](https://github.com/daxlar/trigram_app/blob/master/pictures/connected.jpg){:height="700px" width="400px"}
+![Open app and you should be greeted with:](https://github.com/daxlar/trigram_app/blob/master/pictures/greeting.jpg){:height="100px" width="100px"}  
+
    
 Technical notes:  
 
