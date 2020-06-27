@@ -26,7 +26,7 @@ Click scan and connect to NORDIC_UART:
 <img src="https://github.com/daxlar/trigram_app/blob/master/pictures/scan.jpg" width="200" height="400">  
 The GraphView UI displays how many devices seen nearby:    
 <img src="https://github.com/daxlar/trigram_app/blob/master/pictures/connected.jpg" width="200" height="400">  
-Open your Firebase Real-Time Database and it should look like this, where each time stamp represents devices seen at that moment in time:  
+Open your Firebase Real-Time Database and it should look like this, where each time stamp represents devices seen at that moment in time:    
 <img src="https://github.com/daxlar/trigram_app/blob/master/pictures/firebase_screenshot.png" width="1200" height="350"> 
 
 Technical notes:  
